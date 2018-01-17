@@ -11,15 +11,18 @@ library(shiny)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-   
-   # Application title
-   titlePanel("Old Faithful Geyser Data"),
+  
+   # NavBar
+    shinyUI(navbarPage("Nos lois",
+                       tabPanel("Loi de Poisson"),
+                       tabPanel("Loi Normale")
+    )),
    
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
       sidebarPanel(
          sliderInput("bins",
-                     "Number of bins:",
+                     "Nombre d'échantillons :",
                      min = 1,
                      max = 500,
                      value = 30)
@@ -27,10 +30,16 @@ ui <- fluidPage(
       
       # Show a plot of the generated distribution
       mainPanel(
-         plotOutput("distPlot")
+        tabsetPanel(
+        tabPanel("Graphique", plotOutput("distPlot")), 
+        tabPanel("Table", verbatimTextOutput("summary")), 
+        tabPanel("Valeurs", tableOutput("table"))      
+        )
       )
    )
 )
+
+
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
