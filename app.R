@@ -21,12 +21,26 @@ ui <- fluidPage(
         "Loi Normale",
         sidebarLayout(
           sidebarPanel(
-            sliderInput(
+            numericInput(
               "n_obs",
               "Nombre d'échantillons :",
-              min = 1,
-              max = 500,
-              value = 30
+              30
+            ),
+            numericInput(
+              "n_means",
+              "Centre :",
+              0
+            ),
+            numericInput(
+              "n_sd",
+              "Ecart Type :",
+              1
+            ),
+            numericInput(
+              "breaks",
+              "Précision de l'histogramme :",
+              50,
+              min = 1
             ),
             downloadButton("downloadNormData", "Télécharger les échantillons")
           ),  
@@ -72,7 +86,7 @@ server <- function(input, output) {
   output$histoPoisson <- renderPlot({
     poissValues <<- dpois(input$nb:input$nb_max, input$l) # x suit une loi poisson et est constitué du nombre d'observations 'n_obs' spécifié par l'utilisateur dans la partie 'UI'
     
-    hist(poissValues, xlab = "x", ylab = "Fréquence",
+    hist(table, xlab = "x", ylab = "Fréquence",
          main = "Loi de Poisson",
          col = "skyblue", border = "white")
     
@@ -81,10 +95,10 @@ server <- function(input, output) {
     })
   })
   
-  # Downloadable csv of selected dataset ----
+  # Downloadable csv of selected dataset 
   output$downloadPoissData <- downloadHandler(
     filename = function() {
-      paste("dataPoiss-", Sys.Date(), ".csv", sep="")
+      paste("dataNorm-", Sys.Date(), ".csv", sep="")
     },
     content = function(file) {
       write.csv(poissValues, file)
@@ -93,11 +107,12 @@ server <- function(input, output) {
   )
   
   output$histoNormale <- renderPlot({
-    normValues <<- rnorm(input$n_obs) # x suit une loi normale et est constitué du nombre d'observations 'n_obs' spécifié par l'utilisateur dans la partie 'UI'
+    normValues <<- rnorm(input$n_obs,input$n_means,input$n_sd) # x suit une loi normale et est constitué du nombre d'observations 'n_obs' spécifié par l'utilisateur dans la partie 'UI'
     
     hist(normValues, xlab = "Valeurs", ylab = "Fréquence",
          main = "Loi Normale",
-         col = "skyblue", border = "white")
+         col = "skyblue", border = "white",
+         breaks = input$breaks)
     
     output$normList<-renderPrint({
       normValues
