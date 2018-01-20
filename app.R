@@ -66,7 +66,7 @@ server <- function(input, output) {
     set.seed(123) # ce paramètre sert à fixer une graine pour l'aléatoire lors de la génération de x (non indispensable)
     
     x = dpois(input$nb:input$nb_max, input$l) # x suit une loi poisson et est constitué du nombre d'observations 'n_obs' spécifié par l'utilisateur dans la partie 'UI'
-
+    
     hist(x, xlab = "x", ylab = "Fréquence",
          main = input$titre_histo, # le titre de notre histogramme (paramètre 'main') va être constitué du texte rentré à la main par l'utilisateur dans la partie 'UI' et stocké dans 'titre_histo'
          col = "skyblue", border = "white")
