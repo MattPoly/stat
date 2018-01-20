@@ -24,7 +24,8 @@ ui <- fluidPage(
             numericInput(
               "n_obs",
               "Nombre d'échantillons :",
-              30
+              30,
+              min = 1
             ),
             numericInput(
               "n_means",
@@ -34,7 +35,8 @@ ui <- fluidPage(
             numericInput(
               "n_sd",
               "Ecart Type :",
-              1
+              1,
+              min = 0
             ),
             numericInput(
               "breaks",
@@ -56,9 +58,9 @@ ui <- fluidPage(
           sidebarPanel(
             numericInput(
               inputId = "nb",
-              label = "Nombre d'observation :",
+              label = "Nombre d'observations :",
               value = 10,
-              min = 0
+              min = 1
             ),
             numericInput(
               inputId = "l",
@@ -72,7 +74,7 @@ ui <- fluidPage(
               10,
               min = 1
             ),
-            downloadButton("downloadPoissData", "Télécharger les échantillons")
+            downloadButton("downloadPoissData", "Télécharger les observations")
           ),
           mainPanel(
             plotOutput("histoPoisson"),
