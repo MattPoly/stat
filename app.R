@@ -14,49 +14,68 @@ ui <- fluidPage(
   
   
   # NavBar
-  shinyUI(navbarPage("Nos lois",
-                     tabPanel("Loi Normale",  
-                              textInput(inputId = "titre_histo", 
-                                        label = "Entrez le titre souhaité pour l'histogramme :",
-                                        value = "Histogramme Loi Normale"),    sidebarLayout(
-                                          sidebarPanel(
-                                            sliderInput("n_obs",
-                                                        "Nombre d'échantillons :",
-                                                        min = 1,
-                                                        max = 500,
-                                                        value = 30)
-                                          ),  mainPanel(
-                                            tabsetPanel(
-                                              tabPanel("Graphique", plotOutput("histoNormale"))
-                                            )
-                                          )
-                                        )
-                     ),
-                     tabPanel("Loi de Poisson",  
-                              textInput(inputId = "titre_histo", 
-                                        label = "Entrez le titre souhaité pour l'histogramme :",
-                                        value = "Histogramme Loi de Poisson"),    sidebarLayout(
-                                          sidebarPanel(
-                                            numericInput(inputId = "nb",
-                                                         label = "Probabilité :",
-                                                         value = "0",
-                                                         min = 0, max = 100),
-                                            numericInput(inputId = "nb_max",
-                                                         label = "Probabilité max:",
-                                                         value = "0",
-                                                         min = 0, max = 100),
-                                            numericInput(inputId = "l",
-                                                         label = "Lambda :",
-                                                         value = "5",
-                                                         min = 0, max = 100)
-                                          ),  mainPanel(
-                                            tabsetPanel(
-                                              tabPanel("Graphique", plotOutput("histoPoisson"))
-                                            )
-                                          )
-                                        )
-                     )
-  )
+  shinyUI(
+    navbarPage(
+      "Nos lois",
+      tabPanel(
+        "Loi Normale",  
+        textInput(
+          inputId = "titre_histo", 
+          label = "Entrez le titre souhaité pour l'histogramme :",
+          value = "Histogramme Loi Normale"
+        ),
+        sidebarLayout(
+          sidebarPanel(
+            sliderInput(
+              "n_obs",
+              "Nombre d'échantillons :",
+              min = 1,
+              max = 500,
+              value = 30
+            )
+          ),  
+          mainPanel(
+            tabsetPanel(
+              tabPanel("Graphique", plotOutput("histoNormale"))
+            )
+          )
+        )
+      ),
+      tabPanel(
+        "Loi de Poisson",  
+        textInput(
+          inputId = "titre_histo", 
+          label = "Entrez le titre souhaité pour l'histogramme :",
+          value = "Histogramme Loi de Poisson"),
+        sidebarLayout(
+          sidebarPanel(
+            numericInput(
+              inputId = "nb",
+              label = "Probabilité :",
+              value = "0",
+              min = 0, max = 100),
+            numericInput(
+              inputId = "nb_max",
+              label = "Probabilité max:",
+              value = "0",
+              min = 0, max = 100),
+            numericInput(
+              inputId = "l",
+              label = "Lambda :",
+              value = "5",
+              min = 0, max = 100)
+          ),
+          mainPanel(
+            tabsetPanel(
+              tabPanel(
+                "Graphique",
+                plotOutput("histoPoisson")
+              )
+            )
+          )
+        )
+      )
+    )
   )         
 )                
 # Define server logic required to draw a histogram
