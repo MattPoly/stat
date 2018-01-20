@@ -56,19 +56,22 @@ ui <- fluidPage(
           sidebarPanel(
             numericInput(
               inputId = "nb",
-              label = "Probabilité :",
-              value = "0",
-              min = 0, max = 100),
-            numericInput(
-              inputId = "nb_max",
-              label = "Probabilité max:",
-              value = "0",
-              min = 0, max = 100),
+              label = "Nombre d'observation :",
+              value = 10,
+              min = 0
+            ),
             numericInput(
               inputId = "l",
-              label = "Lambda :",
-              value = "5",
-              min = 0, max = 100),
+              label = "Intervalle :",
+              value = 5,
+              min = 0
+            ),
+            numericInput(
+              "poiss_breaks",
+              "Précision de l'histogramme :",
+              10,
+              min = 1
+            ),
             downloadButton("downloadPoissData", "Télécharger les échantillons")
           ),
           mainPanel(
@@ -84,11 +87,12 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   output$histoPoisson <- renderPlot({
-    poissValues <<- dpois(input$nb:input$nb_max, input$l) # x suit une loi poisson et est constitué du nombre d'observations 'n_obs' spécifié par l'utilisateur dans la partie 'UI'
+    poissValues <<- rpois(input$nb, input$l)
     
-    hist(table, xlab = "x", ylab = "Fréquence",
+    hist(poissValues, xlab = "Valeurs", ylab = "Fréquence",
          main = "Loi de Poisson",
-         col = "skyblue", border = "white")
+         col = "skyblue", border = "white",
+         breaks = input$poiss_breaks)
     
     output$poissonList<-renderPrint({
       poissValues
@@ -98,7 +102,7 @@ server <- function(input, output) {
   # Downloadable csv of selected dataset 
   output$downloadPoissData <- downloadHandler(
     filename = function() {
-      paste("dataNorm-", Sys.Date(), ".csv", sep="")
+      paste("dataPoiss-", Sys.Date(), ".csv", sep="")
     },
     content = function(file) {
       write.csv(poissValues, file)
