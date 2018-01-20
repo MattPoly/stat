@@ -18,12 +18,7 @@ ui <- fluidPage(
     navbarPage(
       "Nos lois",
       tabPanel(
-        "Loi Normale",  
-        textInput(
-          inputId = "titre_histo", 
-          label = "Entrez le titre souhaité pour l'histogramme :",
-          value = "Histogramme Loi Normale"
-        ),
+        "Loi Normale",
         sidebarLayout(
           sidebarPanel(
             sliderInput(
@@ -35,18 +30,12 @@ ui <- fluidPage(
             )
           ),  
           mainPanel(
-            tabsetPanel(
-              tabPanel("Graphique", plotOutput("histoNormale"))
-            )
+            plotOutput("histoNormale")
           )
         )
       ),
       tabPanel(
-        "Loi de Poisson",  
-        textInput(
-          inputId = "titre_histo", 
-          label = "Entrez le titre souhaité pour l'histogramme :",
-          value = "Histogramme Loi de Poisson"),
+        "Loi de Poisson",
         sidebarLayout(
           sidebarPanel(
             numericInput(
@@ -66,12 +55,7 @@ ui <- fluidPage(
               min = 0, max = 100)
           ),
           mainPanel(
-            tabsetPanel(
-              tabPanel(
-                "Graphique",
-                plotOutput("histoPoisson")
-              )
-            )
+            plotOutput("histoPoisson")
           )
         )
       )
