@@ -84,7 +84,7 @@ server <- function(input, output) {
   # Downloadable csv of selected dataset ----
   output$downloadPoissData <- downloadHandler(
     filename = function() {
-      paste("dataNorm-", Sys.Date(), ".csv", sep="")
+      paste("dataPoiss-", Sys.Date(), ".csv", sep="")
     },
     content = function(file) {
       write.csv(poissValues, file)
