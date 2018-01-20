@@ -27,10 +27,12 @@ ui <- fluidPage(
               min = 1,
               max = 500,
               value = 30
-            )
+            ),
+            downloadButton("downloadNormData", "Télécharger les échantillons")
           ),  
           mainPanel(
-            plotOutput("histoNormale")
+            plotOutput("histoNormale"),
+            verbatimTextOutput('normList')
           )
         )
       ),
@@ -52,10 +54,12 @@ ui <- fluidPage(
               inputId = "l",
               label = "Lambda :",
               value = "5",
-              min = 0, max = 100)
+              min = 0, max = 100),
+            downloadButton("downloadPoissData", "Télécharger les échantillons")
           ),
           mainPanel(
-            plotOutput("histoPoisson")
+            plotOutput("histoPoisson"),
+            verbatimTextOutput('poissonList')
           )
         )
       )
@@ -65,25 +69,51 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
   
-  output$histoPoisson <- renderPlot({ # on fait appel à la fonction 'renderPlot' cette fois car notre sortie sera un graphique
-    set.seed(123) # ce paramètre sert à fixer une graine pour l'aléatoire lors de la génération de x (non indispensable)
+  output$histoPoisson <- renderPlot({
+    poissValues <<- dpois(input$nb:input$nb_max, input$l) # x suit une loi poisson et est constitué du nombre d'observations 'n_obs' spécifié par l'utilisateur dans la partie 'UI'
     
-    x = dpois(input$nb:input$nb_max, input$l) # x suit une loi poisson et est constitué du nombre d'observations 'n_obs' spécifié par l'utilisateur dans la partie 'UI'
-    
-    hist(x, xlab = "x", ylab = "Fréquence",
-         main = input$titre_histo, # le titre de notre histogramme (paramètre 'main') va être constitué du texte rentré à la main par l'utilisateur dans la partie 'UI' et stocké dans 'titre_histo'
+    hist(poissValues, xlab = "x", ylab = "Fréquence",
+         main = "Loi de Poisson",
          col = "skyblue", border = "white")
+    
+    output$poissonList<-renderPrint({
+      poissValues
+    })
   })
   
-  output$histoNormale <- renderPlot({ # on fait appel à la fonction 'renderPlot' cette fois car notre sortie sera un graphique
-    set.seed(123) # ce paramètre sert à fixer une graine pour l'aléatoire lors de la génération de x (non indispensable)
+  # Downloadable csv of selected dataset ----
+  output$downloadPoissData <- downloadHandler(
+    filename = function() {
+      paste("dataNorm-", Sys.Date(), ".csv", sep="")
+    },
+    content = function(file) {
+      write.csv(poissValues, file)
+    },
+    contentType = "text/csv"
+  )
+  
+  output$histoNormale <- renderPlot({
+    normValues <<- rnorm(input$n_obs) # x suit une loi normale et est constitué du nombre d'observations 'n_obs' spécifié par l'utilisateur dans la partie 'UI'
     
-    x = rnorm(input$n_obs) # x suit une loi normale et est constitué du nombre d'observations 'n_obs' spécifié par l'utilisateur dans la partie 'UI'
-    
-    hist(x, xlab = "x", ylab = "Fréquence",
-         main = input$titre_histo, # le titre de notre histogramme (paramètre 'main') va être constitué du texte rentré à la main par l'utilisateur dans la partie 'UI' et stocké dans 'titre_histo'
+    hist(normValues, xlab = "Valeurs", ylab = "Fréquence",
+         main = "Loi Normale",
          col = "skyblue", border = "white")
+    
+    output$normList<-renderPrint({
+      normValues
+    })
   })
+  
+  # Downloadable csv of selected dataset ----
+  output$downloadNormData <- downloadHandler(
+    filename = function() {
+      paste("dataNorm-", Sys.Date(), ".csv", sep="")
+    },
+    content = function(file) {
+      write.csv(normValues, file)
+    },
+    contentType = "text/csv"
+  )
   
 }
 
